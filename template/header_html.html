@@ -1,0 +1,79 @@
+{% load poll_extras %}
+<header class="header">
+    <div class="header__shape">
+        <div class="header__shape-inner"></div>
+    </div>
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar__row">
+                <div class="header__logo"><a href="{% url "home_page" %}" class="header__logo-img"><img
+                        src="{{ site_setting.site_logo.url }}" alt=""></a></div>
+                <div class="navbar__items">
+                    <ul class="navbar__ul">
+                        {% for link in header_link %}
+                            <li class="navbar__item">
+                            <a href="{{ link.url }}" class="navbar__link {% if request.resolver_match.url == '' %}
+                            navbar__link--is-active
+                            {% endif %} ">{{ link }}</a>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                <div class="navbar__action">
+                    {% if request.user.is_authenticated %}
+                        <div class="header__basket">
+                            <span class="header__basket-icon"></span>
+                            <span class="header__basket-count">{{ order_detail.count }}</span>
+                            <div class="header__dropdown">
+                                <div class="header__dropdown-content header__dropdown-content--overflow">
+                                    {% for item in order_detail %}
+                                        <div class="header__basket-item">
+                                            <a href="" class="header__basket-link">
+                                                <img src="{{ item.product.image.url }}" class="header__basket-img">
+                                            </a>
+                                            <div class="header__basket-details">
+                                                <h5><a class="header__basket-title" href="">{{ item.product.name }}</a>
+                                                </h5>
+                                                <div class="header__basket-price">{{ item.product.price | three_digits_currency }}</div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="header__basket-btn">
+                                        <a href="{% url "user_basked" %}" class="btn btn--boxshadow btn--brand w--100">ثبت و نهایی
+                                            کردن
+                                            سفارش</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="header__account">
+                        <span class="header__account-icon"></span>
+                        <div class="header__dropdown header__dropdown--w200">
+                            {% if request.user.is_authenticated %}
+                                <div class="header__dropdown-content">
+                                    {% if user != "" %}
+                                        <a href="http://127.0.0.1:8000/admin/" class="header__account-link">ادمین</a>
+                                    {% endif %}
+                                    <a href="{% url "user_basked" %}" class="header__account-link">سبد خرید</a>
+                                    <a href="{% url "edit_profile_page" %}" class="header__account-link">ویرایش
+                                        اطلاعات</a>
+                                    <a href="{% url "logout_page" %}" class="header__account-link">خروج</a>
+                                </div>
+                            {% else %}
+                                <div class="header__dropdown-content">
+                                    <a href="{% url "login_page" %}" class="header__account-link">ورود</a>
+                                    <a href="{% url "register_page" %}" class="header__account-link">ثبت نام</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="header__menu"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</header>
+
+

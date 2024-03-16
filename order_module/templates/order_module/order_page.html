@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% load poll_extras %}
+{% block title %}
+    سبد خرید
+{% endblock %}
+{% block context %}
+<main class="main">
+    <div class="container">
+        <div class="cart">
+            <h1 class="cart__title">سبد خرید</h1>
+            <form action="">
+                {% for order in order_detail %}
+                    <div class="cart__item">
+                    <div class="cart__row">
+                        <div class="cart__image">
+                            <a href="" class="cart__image-link"><img src="{{ order.product.image.url }}" alt=""
+                                                                     class="cart__image-img"></a>
+                        </div>
+                        <div class="cart__details">
+                            <h5 class="cart__details-h5"><a href="" target="_blank" class="cart__details-link">{{ order.product.name }}</a></h5>
+                            <div class="cart__deatils-features">{{ order.product.short_description }}</div>
+                        </div>
+                        <div class="cart__amounts">
+                            <div class="cart__amounts-div">
+                                <input id="quantity" type="number" class="txt" placeholder="تعداد" value="{{ order.count }}" max="{{ order.product.quantity }}" min="1">
+                                <div class="cart__amounts-price"><span>قیمت : {{ order.product.price | three_digits_currency }}</span></div>
+                                <a href="#" onclick="removeCartItem({{ order.product.id }})" class="cart__amounts-remove">حذف</a>
+                                <button  onclick="add_to_order({{ order.product.id }})" class="cart__amounts-amal">اعمال</button>
+                            </div>
+                        </div>
+                        <div class="cart__total">
+                            <div class="cart__total-div">
+                                <h6 class="cart__total-title">جمع</h6>
+                                {{ order.jam | three_digits_currency }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </form>
+            <div class="cart__info">
+                <div class="cart__table">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th> کل</th>
+                            <td>{{ kol_pardakht | three_digits_currency }}</td>
+                        </tr>
+                        <tr>
+                            <th>تخفیف</th>
+                            <td class="text-red">{{ mablagh_discount | three_digits_currency }}</td>
+                        </tr>
+                        <tr>
+                            <th>قابل پرداخت</th>
+                            <td class="text-blue">{{ after_discount | three_digits_currency }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn--brand btn--boxshadow"><a href="{% url "request_payment" %}" style="color: white">ثبت سفارش</a></button>
+                </div>
+{#                <div class="cart__coupon">#}
+{#                    <form action="">#}
+{#                        <div class="cart__coupon-div">#}
+{#                            <input type="text" placeholder="کوپن خود را بنویسد" class="cart__coupon-input">#}
+{#                            <button class="btn-coupon">اعمال</button>#}
+{#                        </div>#}
+{#                    </form>#}
+{#                </div>#}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

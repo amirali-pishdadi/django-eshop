@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% load poll_extras %}
+{% block title %}
+    فهرست محصولات
+{% endblock %}
+{% block context %}
+    <div class="page">
+        <div class="page__sidebar">
+            <div class="page__sidebar-stikcy">
+                <div class="box">
+                    <div class="box__row">
+                        <div class="box__filter">
+                            <div class="box__content-container">
+                                <div class="box__content">
+                                    <ul class="box__ul">
+                                        <p>متن جستجو شده شما : " {{ search_item }} "</p>
+                                        <br>
+                                        <br>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page__content">
+            <ul class="breadcrumb">
+                <li class="breadcrumb__item breadcrumb__item--hide"><a href="/"
+                                                                       class="breadcrumb__link"><span
+                        class="breadcrumb__span">نتایج جستجو</span></a></li>
+
+
+            </ul>
+            <div class="products">
+                {% if type_search_result == "str" %}
+                            <p>{{ result_products }}</p>
+                {% else %}
+
+                    {% for product in result_products %}
+                        <a href='/products/product-detail/{{ product.slug }}' class="products__item">
+                            <div class="card">
+                                <div class="card__image"><img src="{{ product.image.url }}" alt="" class="card__img">
+                                </div>
+                                <div class="card__title">
+                                    {{ product.name }}
+                                </div>
+                                <div class="card__price">
+                                    <span class="card__total-price">{{ product.price | three_digits_currency }}</span>
+                                </div>
+                                <span class="card__discount">{{ product.discount | discount }}</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

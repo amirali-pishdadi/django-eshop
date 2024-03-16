@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}
+    اطلاعات پرداخت
+{% endblock %}
+
+{% block context %}
+    <div class="header__top">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="slider">
+                    <div class="verify">
+                        {% if status %}
+
+                            پرداخت با موفقیت انجام شد .
+                            <br>
+                            کد پیگیری : {{ RefID }}
+                        {% else %}
+                            پرداخت با خطا انجام شد و یا از طرف کاربر کنسل شد .
+                        {% endif %}
+                        <br>
+                        <button class="btn btn--brand"><a href="{% url "user_basked" %}">بازگشت به سبد
+                            خرید</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

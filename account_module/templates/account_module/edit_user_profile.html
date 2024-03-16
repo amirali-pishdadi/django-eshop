@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}
+    تغییر اطلاعات کاربر
+{% endblock %}
+{% block context %}
+
+    <main class="main">
+        <div class="account">
+            <div class="container">
+                <h1 class="account__title">ویرایش اطلاعات</h1>
+                <div class="account__form">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {{ edit_page_form.as_p }}
+                        <button type="submit" onclick="" class="btn btn--brand btn--boxshadow w--100">ویرایش اطلاعات
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

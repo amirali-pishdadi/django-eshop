@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% load poll_extras %}
+{% block title %}
+    فهرست محصولات
+{% endblock %}
+{% block context %}
+    <div class="page">
+        <div class="page__sidebar">
+            <div class="page__sidebar-stikcy">
+                <div class="box">
+                    <div class="box__row">
+                        <div class="box__header">برند ها</div>
+                        <div class="box__filter">
+                            <div class="box__content-container">
+                                <div class="box__content">
+                                    <ul class="box__ul">
+                                        <li data-id="1" class="box__li">
+
+                                            <label class="ui-checkbox" data-en="all">
+                                                {#                                                    <input type="checkbox" class="ui-checkbox__input">#}
+                                                {#                                                    <span class="ui-checkbox__mark"></span>#}
+                                                <a style="color: black !important;"
+                                                   href="/products/all-product/">همه محصولات</a>
+                                            </label>
+                                        </li>
+                                        {% for brand in brands %}
+                                            <li data-id="1" class="box__li">
+
+                                                <label class="ui-checkbox" data-en="{{ brand.slug }}">
+                                                    {#                                                    <input type="checkbox" class="ui-checkbox__input">#}
+                                                    {#                                                    <span class="ui-checkbox__mark"></span>#}
+                                                    <a style="color: black !important;"
+                                                       href="/products/all-product/?brand_id={{ brand.pk }}">{{ brand.name }}</a>
+                                                </label>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page__content">
+            <ul class="breadcrumb">
+                <li class="breadcrumb__item breadcrumb__item--hide"><a href="{% url "home_page" %}" class="breadcrumb__link"><span
+                        class="breadcrumb__span">خانه</span></a></li>
+                <li class="breadcrumb__item"><a href="{% url "all_product" %}" class="breadcrumb__link"><span class="breadcrumb__span">فهرست محصولات</span></a>
+                </li>
+                </li>
+            </ul>
+            <div class="products">
+                {% for product in products %}
+                    <a href='/products/product-detail/{{ product.slug }}' class="products__item">
+                        <div class="card">
+                            <div class="card__image"><img src="{{ product.image.url }}" alt="" class="card__img"></div>
+                            <div class="card__title">
+                                {{ product.name }}
+                            </div>
+                            <div class="card__price">
+                                <span class="card__total-price">{{ product.price | three_digits_currency }}</span>
+                            </div>
+                            <span class="card__discount">{{ product.discount | discount }}</span>
+                        </div>
+                    </a>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

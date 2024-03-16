@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+{% load poll_extras %}
+{% block title %}
+    test
+{% endblock %}
+
+{% block context %}
+    <div class="header__top">
+        <div class="header__top-content">
+            <h1 class="header__top-h1">{{ site_setting.site_name }}</h1>
+            <p class="header__top-p">با کمترین هزینه حرفه ای شو</p>
+        </div>
+        <form class="header__form" method="POST" action="{% url "home_page" %}">
+            <div class="header__search">
+                {% csrf_token %}
+
+                <input type="text" class="header__serach-input" name="search"
+                       placeholder="محصول مورد نظر خود را جستجو کنید ...">
+                <button class="header__search-btn btn btn--brand btn--boxshadow" type="submit"></button>
+            </div>
+        </form>
+    </div>
+    <div class="slideshow">
+        {% for slider in sliders %}
+            <a href="" class="slideshow__slide"><img src="{{ slider.image.url }}" class="slideshow__img"
+                                                     alt=""></a>
+        {% endfor %}
+        <a onclick="move(-1)" class="slideshow__prev">&#10095</a>
+        <a onclick="move(1)" class="slideshow__next">&#10094</a>
+
+        <div class="slideshow__items">
+            {% for slider in sliders %}
+                <div class="slideshow__item">
+                    <div class="slideshow__item-inner"></div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+    </div>
+
+    <div class="slider">
+        <div class="slider__head"><span class="slider__title"><a style="color: #2f3336" href="{% url "all_product" %}">همه محصولات</a></span>
+        </div>
+        <div class="slider__content">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for product in products %}
+                        <a href="/products/product-detail/{{ product.slug }}" class="swiper-slide">
+                            <div class="card">
+                                <div class="card__image"><img src="{{ product.image.url }}" alt=""
+                                                              class="card__img">
+                                </div>
+                                <div class="card__title">
+                                    {{ product.name }}
+                                </div>
+                                <div class="card__price">
+                                    <span class="card__compare-price"></span>
+                                    <span class="card__total-price">{{ product.price | three_digits_currency }}</span>
+                                </div>
+                                {% if product.discount <= 0 %}
+
+                                    {% else %}
+                                    <span class="card__discount">{{ product.discount |discount }}</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-button-next">&#10095</div>
+        <div class="swiper-button-prev">&#10094</div>
+    </div>
+    <aside class="adplacement">
+        <div class="adplacement__row">
+            {% for ad in ads %}
+                <a href="{{ ad.url }}" class="adplacement__link">
+                    <img src="{{ ad.image.url }}" alt="" class="adplacement__img">
+                    <h3>{{ ad.name }}</h3>
+                </a>
+            {% endfor %}
+
+        </div>
+    </aside>
+{% endblock %}

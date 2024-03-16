@@ -1,0 +1,21 @@
+{% load render_partial %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% include 'header_link_script.html' %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+{% render_partial 'site_module.views.site_header' %}
+<div class="main">
+    <div class="container">
+        {% block context %}
+
+        {% endblock %}
+    </div>
+</div>
+{% render_partial 'site_module.views.site_footer' %}
+{% include 'footer_link_script.html' %}
+</body>
+</html>

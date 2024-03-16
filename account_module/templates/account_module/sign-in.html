@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block title %}
+    ثبت نام
+{% endblock %}
+{% block context %}
+
+<main class="main">
+    <div class="account">
+        <div class="container">
+            <h1 class="account__title">ورود به وب سایت</h1>
+            <div class="account__form">
+                <form method="post" action="{% url "login_page" %}">
+                    {% csrf_token %}
+                    {{ login_form.email }}
+                    {{ login_form.email.errors }}
+                    {{ login_form.password }}
+                    {{ login_form.password.errors }}
+                    <label class="ui-checkbox">
+                        <input type="checkbox" class="ui-checkbox__input">
+                    </label>
+                    <a href="{% url "forget_password_page" %}" class="account__recoverpass">بازیابی رمز عبور</a>
+                    <button type="submit" class="btn btn--brand btn--boxshadow w--100">ورود به سایت</button>
+
+                    <div class="account__footer">
+                        <span>کاربر جدید هستید ؟ </span>
+                        <a href="{% url "register_page" %}" class="account__router">صفحه ثبت نام</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}

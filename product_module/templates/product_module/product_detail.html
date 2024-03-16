@@ -1,0 +1,272 @@
+{% extends 'layout.html' %}
+{% load poll_extras %}
+{% load thumbnail %}
+{% block title %}
+    درباره محصول
+{% endblock %}
+
+{% block context %}
+    <ul class="breadcrumb">
+        <li class="breadcrumb__item breadcrumb__item--hide"><a href="{% url 'home_page' %}"
+                                                               class="breadcrumb__link"><span
+                class="breadcrumb__span">صفحه اصلی</span></a></li>
+        <li class="breadcrumb__item"><a href="" class="breadcrumb__link"><span
+                class="breadcrumb__span">فهرست محصولات</span></a>
+        </li>
+        <li class="breadcrumb__item"><a href="" class="breadcrumb__link"><span
+                class="breadcrumb__span">{{ product.name }}</span></a>
+        </li>
+    </ul>
+    <div class="product">
+        <div class="product__header">
+            <div class="product__expiration" style="display: none;">
+                <div class="count-down__timer" data-countdown="2021-08-07 00:00:00" id="count-dowm__timer">
+                    -515:-16:-24:-8
+                </div>
+            </div>
+            <div class="product__row">
+                <div class="prodcut__gallery">
+                    <div class="gallery">
+                        <div class="gallery__slideshow">
+                            <span class="gallery__count">
+                            <span class="gallery__number1">1</span>
+                            <span class="gallery__number2">8</span>
+                        </span>
+                            <div class="gallery__slides">
+                                <div class="gallery__slide" style="display: block;"><img class="gallery__img"
+                                                                                         src="{{ product.image.url }}"
+                                                                                         alt=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product__left">
+                    {#                            <div class="product__category">دسته وب</div>#}
+                    <div class="product__info">
+                        <h1 class="product__title">{{ product.name }}</h1>
+
+                        <div class="rating">
+                            <div class="rating__star">
+                                <span class="rating__rate" data-width="100%" data-title="عالی"></span>
+                                <span class="rating__rate" data-width="80%" data-title="خوب"></span>
+                                <span class="rating__rate" data-width="60%" data-title="معمولی"></span>
+                                <span class="rating__rate" data-width="40%" data-title="ضعیف"></span>
+                                <span class="rating__rate" data-width="20%" data-title="بد"></span>
+                            </div>
+                            <div class="rating__fstar">
+                                <span class="rating__frate"></span>
+                                <span class="rating__frate"></span>
+                                <span class="rating__frate"></span>
+                                <span class="rating__frate"></span>
+                                <span class="rating__frate"></span>
+                            </div>
+                        </div>
+                        <div class="rating-star">4.5
+                            <span class="rating__num">(65)</span>
+                        </div>
+                    </div>
+                    <div class="controls">
+                        <div class="controls__group">
+                            <input type="number" id="quantity" class="controls__input" min="0"
+                                   max="{{ product.quantity }}"
+                                   placeholder="تعداد">
+
+                        </div>
+                    </div>
+                    <div class="product__price">
+                        {#                                <h5 class="product__campare-price">12,200,200</h5>#}
+                        <h5 class="product__total-price">{{ product.price | three_digits_currency }}</h5>
+                        <div class="product__discount">
+                            <span class="product__dicount-value">{{ product.discount | discount }}</span>
+                            <span class="product__dicount-label">تخفیف</span>
+                        </div>
+                    </div>
+                    <div class="alert alert--warning d--none">این محصول موجود نمی باشد</div>
+                    <div class="product__buttons">
+                        <button onclick="add_to_order({{ product.id }})"
+                                class="btn btn--brand btn--boxshadow btn--add-basket">افزدون به سبد خرید
+                        </button>
+                        {% if is_favorite == False %}
+                            <form action="{% url "add_favorite" %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}"
+                                       class="search_box">
+                                <button class="btn btn-transparent btn--fav">افزودن به علاقه مندی ها</button>
+                            </form>
+                        {% endif %}
+
+                        {% if is_favorite %}
+                            <p>این محصول جزو علاقه مندی شما بوده است .</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="product__desc">
+            <p class="product__desc-content">{{ product.short_description }}
+            </p>
+        </div>
+    </div>
+    <div class="slider">
+        <div class="slider__head"><span class="slider__title"><a style="color: #2f3336" href="{% url "all_product" %}">همه محصولات</a></span></div>
+        <div class="slider__content">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for all_product in all_products %}
+                        <a href="/products/product-detail/{{ all_product.slug }}" class="swiper-slide">
+                            <div class="card">
+                                <div class="card__image"><img src="{{ all_product.image.url }}" alt=""
+                                                              class="card__img"></div>
+                                <div class="card__title">
+                                    {{ all_product.name }}
+                                </div>
+                                <div class="card__price">
+                                    <span class="card__total-price">{{ all_product.price | three_digits_currency }}</span>
+                                </div>
+                                <span class="card__discount">{{ all_product.discount | discount }}</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <div class="swiper-button-next">❯</div>
+        <div class="swiper-button-prev">❮</div>
+    </div>
+    <div class="product-details">
+        <div class="tab">
+            <div class="tab__items">
+                <span class="tab__item tab__item--compare tab__item--is-active">نقد و بررسی</span>
+                <span class="tab__item tab__item--comments">نظرات</span>
+            </div>
+            <div class="tab__sections">
+                <section style="display: block" class="tab__section tab__section--compare">
+                    <h1>{{ about_product.title }}</h1>
+                    <p>{{ about_product.description }}</p>
+                    <img src="{{ about_product.image.url }}" alt="">
+                </section>
+                <section class="tab__section tab__section--comments">
+                    <div class="comments" id="comments">
+                        <div id="comments__send" style="display: inline" class="comments__send">
+                            <div class="comments__title">
+                                <h3 class="comments__h3">دیدگاه خود را بنویسد</h3>
+                                <span class="comments__count">دیدگاه ها ( {{ comments.count }} )</span>
+                            </div>
+                            <textarea style="display: inline" id="text_message" class="txt txt--textarea"
+                                      placeholder="دیدگاه خود را بنویسید ..."></textarea>
+                            <h4 id="status"></h4>
+                            <br>
+                            <button style="display: inline" id="button_message" onclick="add_comment({{ product.id }})"
+                                    class="btn btn--brand btn--boxshadow">ارسال
+                                نظر
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="comments__list">
+                        <div id="comment">
+                            <div class="comments__box">
+                                <div class="comments__inner">
+                                    {% for comment in comments %}
+                                        <div id="comment">
+                                        <div class="comments__box">
+                                            <div class="comments__inner">
+                                                <div class="comments__header">
+                                                    <div class="comments__row">
+                                                        <div class="comments__info">
+                                                            <div class="comments__avatar">
+                                                                {% if comment.user.avatar %}
+                                                                    {% thumbnail comment.user.avatar "100x100" quality=95 crop='center' as im %}
+                                                                        <img src="{{ im.url }}">
+                                                                    {% endthumbnail %}
+                                                                {% else %}
+                                                                    <img src="/static/img/profile.jpg" alt="">
+                                                                {% endif %}
+
+                                                            </div>
+                                                            <div class="comments__details">
+                                                                <h5 class="comments__author"><span
+                                                                        class="comments__author-name">{{ comment.user.get_full_name }}</span>
+                                                                </h5>
+                                                                <span class="comments__date">{{ comment.time_create }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <button onclick="show_textarea()"
+                                                                class="btn btn--brand btn--reply btn--boxshadow">پاسخ
+                                                        </button>
+                                                    </div>
+                                                    <div class="comments__body">
+                                                        {{ comment.message }}
+                                                    </div>
+                                                </div>
+                                                <textarea style="display: none" id="text_message_pasokh"
+                                                          class="txt txt--textarea"
+                                                          placeholder="دیدگاه خود را بنویسید ..."></textarea>
+                                                <h4 id="status_pasokh"></h4>
+                                                <button style="display: none"
+                                                        onclick="add_pasokh({{ product.id }} , {{ comment.id }})"
+                                                        id="button_pasokh"
+                                                        class="btn btn--brand btn--boxshadow">ارسال
+                                                    پاسخ
+                                                </button>
+                                            </div>
+                                            {% for sub_comment in comment.comment_set.all %}
+                                                <div class="comments__subset">
+                                                    <div id="comment">
+                                                        <div class="comments__box">
+                                                            <div class="comments__inner">
+                                                                <div class="comments__header">
+                                                                    <div class="comments__row">
+                                                                        <div class="comments__info">
+                                                                            <div class="comments__avatar">
+                                                                                {% if sub_comment.user.avatar %}
+                                                                                    {% thumbnail sub_comment.user.avatar "75x75" quality=95 crop='center' as im %}
+                                                                                        <img src="{{ im.url }}">
+                                                                                    {% endthumbnail %}
+                                                                                {% else %}
+                                                                                    <img src="/static/img/profile.jpg"
+                                                                                         alt="">
+                                                                                {% endif %}</div>
+                                                                            <div class="comments__details">
+                                                                                <h5 class="comments__author"><span
+                                                                                        class="comments__author-name">{{ sub_comment.user.get_full_name }}</span>
+                                                                                </h5>
+                                                                                <span class="comments__date">{{ sub_comment.time_create }} ‌  ‌   ‌(<span>در پاسخ به نظر : {{ comment.user.get_full_name }}</span>)</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="comments__body">{{ sub_comment.message }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            {% endfor %}
+                                    {% endfor %}
+                                    <textarea style="display: none" id="text_message_pasokh"
+                                              class="txt txt--textarea"
+                                              placeholder="پاسخ خود را بنویسید"></textarea>
+                                    <h4 id="status_pasokh"></h4>
+                                    <button style="display: none"
+                                            onclick="add_pasokh({{ product.id }} , {{ comment.id }})"
+                                            id="button_pasokh"
+                                            class="btn btn--brand btn--boxshadow">ارسال
+                                        پاسخ
+                                    </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block title %}
+    ثبت نام
+{% endblock %}
+{% block context %}
+
+    <main class="main">
+        <div class="account">
+            <div class="container">
+                <h1 class="account__title">ثبت نام در سایت</h1>
+                <div class="account__form">
+                    <form method="post" action="{% url 'register_page' %}">
+                        {% csrf_token %}
+
+                        {{ form.first_name }}
+                        {{ form.first_name.errors }}
+
+                        {{ form.last_name }}
+                        {{ form.last_name.errors }}
+
+                        {{ form.email }}
+                        {{ form.email.errors }}
+
+                        {{ form.password }}
+                        {{ form.password.errors }}
+
+                        {{ form.confirm_password }}
+                        {{ form.confirm_password.errors }}
+                        <button class="btn btn--brand btn--boxshadow w--100 margin--bottom-10">ورود به سایت</button>
+
+
+                        <div class="account__footer">
+                            <span>قبلا ثبت نام کردید ؟</span>
+                            <a href="{% url "login_page" %}" class="account__router">صفحه ورود</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
